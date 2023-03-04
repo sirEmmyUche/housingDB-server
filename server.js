@@ -2,15 +2,16 @@ require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const User = require("./models/user");
 const HouseRegistration = require("./models/registerhouse");
 const signuproute = require("./routes/signup");
 const loginroute = require("./routes/login");
-
+const passport = require("passport");
+require("./routes/googlesignup")(passport);
 
 const app = express();
+app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
 app.use(cors()); 
@@ -22,8 +23,26 @@ const PORT = process.env.PORT || 3000;
 
 //handling routes request
 app.use("/", signuproute)
-app.use("/", loginroute)
+app.use("/", loginroute);
 
+app.get("/", (req, res)=>{
+  res.render("index")
+})
+
+//handling google signup request
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile'] })
+  );
+
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/home');
+  });
+
+
+// listening to port
 app.listen(PORT, ()=>{
     console.log(`it is working on port ${PORT}`)
 });

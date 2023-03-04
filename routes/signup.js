@@ -41,7 +41,6 @@ router.post("/signup", (req, res)=>{
     });
 })
 
-
 module.exports = router;
 
 // 2. Sign up

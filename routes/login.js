@@ -10,7 +10,8 @@ router.use(bodyParser.urlencoded({extended:false}))
 router.use(bodyParser.json());
 
 router.post("/login", (req, res)=>{
- const {password, email} = req.body;
+    try{
+        const {password, email} = req.body;
  User.findOne({email:email},(err, foundUser)=>{
     if(err){
         console.log(err)
@@ -19,7 +20,7 @@ router.post("/login", (req, res)=>{
             res.status(404).json("User not found")
         }
         if(foundUser){
-         bcrypt.compare(password, hash, function(err, result) {
+         bcrypt.compare(password, foundUser.password, function(err, result) {
            if(err){
             console.log(err)
            } 
@@ -33,6 +34,9 @@ router.post("/login", (req, res)=>{
         }
     }
  })
+    }catch(err){
+        console.log(err)
+    }
 })
 
 module.exports = router;
