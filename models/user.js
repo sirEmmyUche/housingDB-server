@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-var findOrCreate = require('mongoose-findorcreate');
 
 // users schema
 
@@ -21,8 +20,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "Please provide a password"]
-    }
+    },
+
 })
-userSchema.plugin(findOrCreate);
 
 module.exports = mongoose.model("User", userSchema);

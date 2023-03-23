@@ -28,7 +28,8 @@ router.post("/login", (req, res)=>{
             res.status(404).json("Incorrect username and password")
            }
            if(result===true){
-            res.status(200).json(foundUser.firstName)
+            // res.status(200).json(foundUser.firstName)
+            res.render("index")
            }
          });
         }

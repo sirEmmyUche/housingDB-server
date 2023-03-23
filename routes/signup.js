@@ -32,7 +32,8 @@ router.post("/signup", (req, res)=>{
                     if(err){
                         res.status(404).json(err)
                     }else{
-                        res.status(200).json("Signup successful") 
+                        // res.status(200).json("Signup successful") 
+                        res.render("home")
                     }
                 });
             })

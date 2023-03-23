@@ -25,15 +25,17 @@ const registerAHouseSchema = new mongoose.Schema({
         type: String,
         required:[true, "State is required"]
     },
-    house:{
-        houseType: String,
-        desc: String,
-        img: {
-            data: Buffer,
-            contentType: String
-        }
-        
+    houseImg:{
+        filename: { type: String, required: true },
+        contentType: { type: String, required: true },
+        data: { type: Buffer, required: true },
+    },
+    doc:{
+        filename: { type: String, required: true },
+        contentType: { type: String, required: true },
+        data: { type: Buffer, required: true },
     }
+
 })
                  
 module.exports = mongoose.model("HouseRegistration", registerAHouseSchema)
