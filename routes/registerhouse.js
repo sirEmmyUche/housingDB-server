@@ -1,11 +1,13 @@
-const fs = require('fs');
+// const fs = require('fs');
 const express = require("express");
 const bodyParser = require("body-parser");
 const HouseRegistration = require("./models/registerhouseschema");
 
 const router = express.Router();
 
+app.use(bodyParser.urlencoded({extended:false}))
 router.use(bodyParser.json());
+
 
 router.post("/registerhouse", (req, res)=>{
     const {nameOfOwner,houseNumber,street,LGA,state, house} = req.body;
@@ -18,7 +20,7 @@ router.post("/registerhouse", (req, res)=>{
         house: {houseType: house, desc: house, img: img }
     })
     newHouseRegistration.save((err)=>{
-        if(err){
+        if(err){ 
             console.log(err)} 
         else{
             res.status(200).json("House registration completed")
