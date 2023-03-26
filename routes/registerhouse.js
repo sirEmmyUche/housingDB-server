@@ -1,12 +1,25 @@
-// const fs = require('fs');
+require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
 const HouseRegistration = require("./models/registerhouseschema");
+const multer  = require('multer');
+const {GridFsStorage} = require('multer-gridfs-storage');
 
 const router = express.Router();
 
 app.use(bodyParser.urlencoded({extended:false}))
 router.use(bodyParser.json());
+
+const storage = new GridFsStorage({
+  url: process.env.MONGO_URL,
+  file: (req, file) => {
+    return {
+      filename: file.originalname
+    };
+  }
+});
+const upload = multer({ storage });
+
 
 
 router.post("/registerhouse", (req, res)=>{
@@ -79,5 +92,86 @@ mongoose.connection.once('open', () => {
 
 // export the schema and the upload middleware
 module.exports = { File, upload, gfs };
+
+
+another example
+
+const express = require('express');
+const multer = require('multer');
+const { MongoClient, ObjectId } = require('mongodb');
+
+const app = express();
+
+// Set up Multer for handling file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// Connect to MongoDB
+const mongoClient = new MongoClient('mongodb://localhost:27017/mydb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+mongoClient.connect((err, client) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  const db = client.db('mydb');
+
+  // Route for uploading files
+  app.post('/upload', upload.single('file'), (req, res) => {
+    const file = req.file;
+    if (!file) {
+      res.status(400).send('No file uploaded.');
+      return;
+    }
+    // Insert the file into the database
+    const collection = db.collection('files');
+    collection.insertOne(
+      {
+        name: file.originalname,
+        type: file.mimetype,
+        size: file.size,
+        data: file.buffer,
+      },
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send('Error uploading file.');
+          return;
+        }
+        res.send('File uploaded successfully.');
+      }
+    );
+  });
+
+  // Route for downloading files
+  app.get('/download/:id', (req, res) => {
+    const id = req.params.id;
+    const collection = db.collection('files');
+    // Find the file in the database by ID
+    collection.findOne({ _id: ObjectId(id) }, (err, file) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error downloading file.');
+        return;
+      }
+      if (!file) {
+        res.status(404).send('File not found.');
+        return;
+      }
+      // Set the content type and send the file data as the response
+      res.set('Content-Type', file.type);
+      res.send(file.data);
+    });
+  });
+
+  // Start the server
+  app.listen(3000, () => {
+    console.log('Server listening on port 3000.');
+  });
+});
+
 
 */
