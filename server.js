@@ -7,6 +7,7 @@ const User = require("./models/user");
 const signuproute = require("./routes/signup");
 const loginroute = require("./routes/login");
 const googleSignUp = require("./routes/googlesignup");
+const houseRegistrationRoute = require("./routes/registerhouse");
 
 // require("./routes/googlesignup")(passport);
 
@@ -17,7 +18,7 @@ app.use(bodyParser.json());
 app.use(cors()); 
 
 mongoose.set("strictQuery", false);
-mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true});
+mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true, useUnifiedTopology: true });
 
 const PORT = process.env.PORT || 3000;
 
@@ -30,7 +31,9 @@ app.get("/", (req, res, next)=>{
 
 app.use("/", signuproute)
 app.use("/", loginroute)
-app.use("/", googleSignUp);
+app.use("/", googleSignUp)
+app.use("/", houseRegistrationRoute);
+
 
 
 

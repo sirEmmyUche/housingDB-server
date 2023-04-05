@@ -1,7 +1,18 @@
 const mongoose = require("mongoose");
 
-
 // house registration schema
+
+const imageSchema = new mongoose.Schema({
+    filename: { type: String, required: true },
+  contentType: { type: String, required: true },
+  size: { type: Number, required: true },
+  uploadDate: { type: Date, required: true },
+  metadata: { type: Object }
+})
+
+const Img = mongoose.model("Img", imageSchema);
+
+
 const registerAHouseSchema = new mongoose.Schema({
     nameOfOwner:{
         type: String,
@@ -34,24 +45,14 @@ const registerAHouseSchema = new mongoose.Schema({
 
 })
 
-
-const imageSchema = new mongoose.Schema({
-    filename: { type: String, required: true },
-  contentType: { type: String, required: true },
-  size: { type: Number, required: true },
-  uploadDate: { type: Date, required: true },
-  metadata: { type: Object }
-})
-
 const RegisterHouse = mongoose.model("RegisterHouse", registerAHouseSchema);
 
-const Img = mongoose.model("Img", imageSchema);
 
-module.exports = { RegisterHouse, Img}
+
+
+module.exports = { RegisterHouse, Img};
 
 // module.exports = mongoose.model("HouseRegistration", registerAHouseSchema)
-
-
 
 
 

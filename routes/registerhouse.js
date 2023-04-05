@@ -1,45 +1,54 @@
 require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
-const HouseRegistration = require("./models/registerhouseschema");
+const { RegisterHouse, Img} = require("../models/registerhouseschema");
 const multer  = require('multer');
 const {GridFsStorage} = require('multer-gridfs-storage');
+const upload = multer({ dest: 'uploads/' });
 
 const router = express.Router();
 
-app.use(bodyParser.urlencoded({extended:false}))
+router.use(bodyParser.urlencoded({extended:false}))
 router.use(bodyParser.json());
 
-const storage = new GridFsStorage({
-  url: process.env.MONGO_URL,
-  file: (req, file) => {
-    return {
-      filename: file.originalname
-    };
-  }
-});
-const upload = multer({ storage });
+// const storage = new GridFsStorage({
+//   url: process.env.MONGO_URL,
+//   file: (req, file) => {
+//     return {
+//       filename: file.originalname
+//     };
+//   }
+// });
+// const upload = multer({ storage });
 
+router.post('/photos', upload.single('photos', 12), function (req, res, next) {
+  // req.files is array of `photos` files
+  // req.body will contain the text fields, if there were any
+  const {nameOfOwner,houseNumber,street,LGA,state,} = req.body;
+  const {houseImg} = req.files;
+  console.log(LGA)
+  console.log(houseImg)
 
-
-router.post("/registerhouse", (req, res)=>{
-    const {nameOfOwner,houseNumber,street,LGA,state, house} = req.body;
-    const newHouseRegistration = new HouseRegistration({
-        nameOfOwner: nameOfOwner,
-        houseNumber:houseNumber,
-        street:street,
-        LGA:LGA,
-        state:state,
-        house: {houseType: house, desc: house, img: img }
-    })
-    newHouseRegistration.save((err)=>{
-        if(err){ 
-            console.log(err)} 
-        else{
-            res.status(200).json("House registration completed")
-        }
-    })
+  // const newHouseRegistration = new HouseRegistration({
+  //   nameOfOwner: nameOfOwner,
+  //   houseNumber: houseNumber,
+  //   street: street,
+  //   LGA: LGA,
+  //   state: state,
+  //   houseImg : houseImg
+  // })
+  // newHouseRegistration.save((err)=>{
+  //   if (err){
+  //     console.error(err)
+  //   }else{
+  //     res.status(200).json("Successfully registerd a house")
+  //   }
+  // })
+  next()
 })
+
+module.exports = router;
+
 
 
 
