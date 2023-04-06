@@ -8,13 +8,21 @@ const signuproute = require("./routes/signup");
 const loginroute = require("./routes/login");
 const googleSignUp = require("./routes/googlesignup");
 const houseRegistrationRoute = require("./routes/registerhouse");
+const path = require("path"); // path is an inbuilt node package
 
-// require("./routes/googlesignup")(passport);
-
+// setting express app
 const app = express();
+
+// setting ejs engine
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(`${__dirname}/public`));
+
+// setting body-parser
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
+
+// allowing cors
 app.use(cors()); 
 
 mongoose.set("strictQuery", false);
@@ -25,7 +33,7 @@ const PORT = process.env.PORT || 3000;
 
 //handling routes request
 app.get("/", (req, res, next)=>{
-  res.render("index");
+  res.status(200).render("index");
   next()
 })
 
