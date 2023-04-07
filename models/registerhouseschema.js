@@ -2,18 +2,23 @@ const mongoose = require("mongoose");
 
 // house registration schema
 
-const imageSchema = new mongoose.Schema({
-    filename: { type: String, required: true },
-  contentType: { type: String, required: true },
-  size: { type: Number, required: true },
-  uploadDate: { type: Date, required: true },
-  metadata: { type: Object }
-})
+// const imageSchema = new mongoose.Schema({
+//     filename: { type: String, required: true },
+//   contentType: { type: String, required: true },
+//   size: { type: Number, required: true },
+//   uploadDate: { type: Date, required: true },
+//   metadata: { type: Object }
+// })
 
-const Img = mongoose.model("Img", imageSchema);
+// const Img = mongoose.model("Img", imageSchema);
 
 
 const registerAHouseSchema = new mongoose.Schema({
+    createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+      
     nameOfOwner:{
         type: String,
         required:[true, "Name of house owner must be included and must match details in supported document"]
@@ -36,13 +41,12 @@ const registerAHouseSchema = new mongoose.Schema({
         type: String,
         required:[true, "State is required"]
     },
-    houseImg: imageSchema,
-    // doc:{
-    //     filename: { type: String, required: true },
-    //     contentType: { type: String, required: true },
-    //     data: { type: Buffer, required: true },
-    // }
-
+    houseImg: {
+        type: String,
+        required: ["please upload an image"]
+        //imageSchema,
+    }
+    
 })
 
 const RegisterHouse = mongoose.model("RegisterHouse", registerAHouseSchema);
@@ -50,7 +54,8 @@ const RegisterHouse = mongoose.model("RegisterHouse", registerAHouseSchema);
 
 
 
-module.exports = { RegisterHouse, Img};
+module.exports = { RegisterHouse, };
+//Img  was excluded from the export module. 
 
 // module.exports = mongoose.model("HouseRegistration", registerAHouseSchema)
 
