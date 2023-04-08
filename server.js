@@ -44,8 +44,6 @@ app.use("/", houseRegistrationRoute);
 
 
 
-
-
 // listening to port
 app.listen(PORT, ()=>{
     console.log(`it is working on port ${PORT}`)

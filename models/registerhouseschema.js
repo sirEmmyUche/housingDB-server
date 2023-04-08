@@ -18,6 +18,10 @@ const registerAHouseSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
       },
+    //   user: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: ['User', GoogleUserSchema]
+    //   },
       
     nameOfOwner:{
         type: String,
@@ -26,7 +30,7 @@ const registerAHouseSchema = new mongoose.Schema({
     houseNumber: {
         type: Number,
         min: 1,
-        max: 12,
+        max: 15,
         required: [true, "Enter house number"]
     },
     street:{
@@ -45,6 +49,10 @@ const registerAHouseSchema = new mongoose.Schema({
         type: String,
         required: ["please upload an image"]
         //imageSchema,
+    },
+    proofOfOwnership:{
+        type: String,
+        require:[true, "please provide documents supporting proof of ownership"]
     }
     
 })
