@@ -29,8 +29,6 @@ const registerAHouseSchema = new mongoose.Schema({
     },
     houseNumber: {
         type: Number,
-        min: 1,
-        max: 15,
         required: [true, "Enter house number"]
     },
     street:{
@@ -58,8 +56,6 @@ const registerAHouseSchema = new mongoose.Schema({
 })
 
 const RegisterHouse = mongoose.model("RegisterHouse", registerAHouseSchema);
-
-
 
 
 module.exports = { RegisterHouse, };

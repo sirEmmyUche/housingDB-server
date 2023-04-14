@@ -57,9 +57,6 @@ Housing DB backend structure......
 Input values: (House number, house address (name of street), LGA, state, country (for now, Nigeria)  
 Output: name of house owner, image of house.
 
-4. Register a house
-Input values: House number, street, LGA, state, country. Image of house, 
-proof of ownership: name of house owner (documents to backup claims)
 */
 
 
