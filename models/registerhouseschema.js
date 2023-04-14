@@ -2,17 +2,6 @@ const mongoose = require("mongoose");
 
 // house registration schema
 
-// const imageSchema = new mongoose.Schema({
-//     filename: { type: String, required: true },
-//   contentType: { type: String, required: true },
-//   size: { type: Number, required: true },
-//   uploadDate: { type: Date, required: true },
-//   metadata: { type: Object }
-// })
-
-// const Img = mongoose.model("Img", imageSchema);
-
-
 const registerAHouseSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
@@ -62,7 +51,6 @@ module.exports = { RegisterHouse, };
 //Img  was excluded from the export module. 
 
 // module.exports = mongoose.model("HouseRegistration", registerAHouseSchema)
-
 
 
 // 4. Register a house

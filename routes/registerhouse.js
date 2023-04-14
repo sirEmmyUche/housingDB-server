@@ -17,10 +17,10 @@ router.use(bodyParser.json());
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     if(file.fieldname === "houseImage"){
-      cb(null, "public/houseImg");
+      cb(null, "./public/housePhoto");
     }
     if(file.fieldname === "proofOfOwnership"){
-      cb(null, "public/proofOfOwnership")
+      cb(null, "./public/documents")
     }
   },
 
@@ -41,24 +41,24 @@ const multerStorage = multer.diskStorage({
 const checkFileType = (file, cb)=>{
   if(file.fieldname === "houseImage"){
     if(
-      file.mimetype === 'application/pdf' ||
-      file.mimetype === 'application/msword' ||
-      file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      file.mimetype === "image/png"||
+      file.mimetype ===  "image/jpg"||
+      file.mimetype === "image/jpeg"
     ){
       cb(null, true);
     } else{
-      cb(null, false);
+      cb(new Error("Not a PDF File!!"), false);
     }
   }
   if(file.fieldname === "proofOfOwnership"){
     if(
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg" ||
-      file.mimetype === "image/jpeg" 
+      file.mimetype ===  'application/pdf' ||
+      file.mimetype ===  'application/msword'||
+      file.mimetype ===  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ){
       cb(null, true);
     } else {
-      cb(null, false);
+      cb(new Error("Not a PDF File!!"), false);
     }
   }
 } 
@@ -66,14 +66,16 @@ const checkFileType = (file, cb)=>{
 
 const upload = multer({
   storage: multerStorage,
-  fileFilter: (req, file, cb)=>{
-    checkFileType(file, cb)
-  }
-});
+  fileFilter: checkFileType,
+  
+})
+
 
 const cpUpload = upload.fields([{name:"houseImage", maxCount: 1},{name:"proofOfOwnership", maxCount: 1}])
 router.post('/api/uploadFile', cpUpload , function(req, res, next){
-  // req.files is array of `photos` files
+
+  try{
+    // req.files is array of `photos` files
   // req.body will contain the text fields, if there were any
   const {nameOfOwner,houseNumber,street,LGA,state,} = req.body;
   console.log(req.files);
@@ -85,8 +87,8 @@ router.post('/api/uploadFile', cpUpload , function(req, res, next){
     street: street,
     LGA: LGA,
     state: state,
-    houseImg :  req.files.houseImage[0].path,
-    proofOfOwnership: req.files.proofOfOwnership[0].path
+    houseImg :  req.files["houseImage"][0].path,
+    proofOfOwnership: req.files["proofOfOwnership"][0].path
   })
   newHouseRegistration.save((err)=>{
     if (err){
@@ -95,6 +97,10 @@ router.post('/api/uploadFile', cpUpload , function(req, res, next){
       res.status(200).json("Successfully registerd a house")
     }
   })
+
+  }catch(error){
+    res.json({error})
+  }
   next()
 })
 
@@ -102,6 +108,18 @@ module.exports = router;
 
 
 /*
+
+// Multer Filter from another code
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.split("/")[1] === "pdf") {
+    cb(null, true);
+  } else {
+    cb(new Error("Not a PDF File!!"), false);
+  }
+};
+
+
+
 
   const path = require('path');
     const multer = require('multer');
