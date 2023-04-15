@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { RegisterHouse } = require("../models/registerhouseschema");
-const multer  = require('multer');
+const multer = require("multer");
 // const User = require("./models/user");
 // const GoogleUser = require("../models/googleschema");
 
@@ -20,7 +20,7 @@ const multerStorage = multer.diskStorage({
       cb(null, "./public/housePhoto");
     }
     if(file.fieldname === "proofOfOwnership"){
-      cb(null, "./public/documents")
+      cb(null, "./public/proof")
     }
   },
 
@@ -47,7 +47,7 @@ const checkFileType = (file, cb)=>{
     ){
       cb(null, true);
     } else{
-      cb(new Error("Not a PDF File!!"), false);
+      cb(new Error("Not a supported File type!!"), false);
     }
   }
   if(file.fieldname === "proofOfOwnership"){
@@ -58,7 +58,7 @@ const checkFileType = (file, cb)=>{
     ){
       cb(null, true);
     } else {
-      cb(new Error("Not a PDF File!!"), false);
+      cb(new Error("Not a PDF or other supported File type!!"), false);
     }
   }
 } 
@@ -74,7 +74,6 @@ const upload = multer({
 const cpUpload = upload.fields([{name:"houseImage", maxCount: 1},{name:"proofOfOwnership", maxCount: 1}])
 router.post('/api/uploadFile', cpUpload , function(req, res, next){
 
-  try{
     // req.files is array of `photos` files
   // req.body will contain the text fields, if there were any
   const {nameOfOwner,houseNumber,street,LGA,state,} = req.body;
@@ -97,10 +96,9 @@ router.post('/api/uploadFile', cpUpload , function(req, res, next){
       res.status(200).json("Successfully registerd a house")
     }
   })
-
-  }catch(error){
-    res.json({error})
-  }
+  // catch(error){
+  //   res.json({error})
+  // }
   next()
 })
 
