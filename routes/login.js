@@ -17,7 +17,7 @@ router.post("/login", (req, res)=>{
         console.log(err)
     }else{
         if(!foundUser){
-            res.status(404).json("User not found")
+          return res.status(404).json("User not found")
         }
         if(foundUser){
          bcrypt.compare(password, foundUser.password, function(err, result) {
@@ -25,11 +25,11 @@ router.post("/login", (req, res)=>{
             console.log(err)
            } 
            if(result === false){
-            res.status(404).json("Incorrect username and password")
+           return res.status(404).json("Incorrect username and password")
            }
            if(result===true){
             // res.status(200).json(foundUser.firstName)
-            res.render("index")
+           return res.render("index")
            }
          });
         }
