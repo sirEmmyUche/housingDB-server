@@ -32,10 +32,6 @@ const multerStorage = multer.diskStorage({
       cb(null, file.fieldname+Date.now()+path.extname(file.originalname));
     }
   },
-  // filename: (req, file, cb) => {
-  //   const ext = file.mimetype.split("/")[1];
-  //   cb(null, `files/admin-${file.fieldname}-${Date.now()}.${ext}`);
-  // },
 });
 
 const checkFileType = (file, cb)=>{
@@ -45,15 +41,7 @@ const checkFileType = (file, cb)=>{
     file.mimetype.split("/")[1] === "jpg" ||
     file.mimetype.split("/")[1] === "jpeg"){
       cb(null, true);
-    }
-    // if(
-    //   file.mimetype === "image/png"||
-    //   file.mimetype ===  "image/jpg"||
-    //   file.mimetype === "image/jpeg"
-    // ){
-    //   cb(null, true);
-    // } 
-    else{
+    } else{
       cb(new Error("Not a supported File type!!"), false);
     }
   }
@@ -78,6 +66,7 @@ const upload = multer({
 
 
 const cpUpload = upload.fields([{name:"houseImage", maxCount: 1},{name:"proofOfOwnership", maxCount: 1}])
+
 router.post('/api/uploadFile', cpUpload , function(req, res, next){
 try{
   const {nameOfOwner,houseNumber,street,LGA,state,} = req.body;
@@ -124,5 +113,12 @@ const multerFilter = (req, file, cb) => {
     cb(new Error("Not a PDF File!!"), false);
   }
 };
+
+fileFilter: function (req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return cb(new Error('Only image files are allowed!'));
+    }
+    cb(null, true);
+  }
 
 */

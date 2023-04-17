@@ -8,6 +8,7 @@ const signuproute = require("./routes/signup");
 const loginroute = require("./routes/login");
 const googleSignUp = require("./routes/googlesignup");
 const houseRegistrationRoute = require("./routes/registerhouse");
+const verifyHouseRoute = require("./routes/verifyhouse");
 const path = require("path"); // path is an inbuilt node package
 
 // setting express app
@@ -40,7 +41,8 @@ app.get("/", (req, res, next)=>{
 app.use("/", signuproute)
 app.use("/", loginroute)
 app.use("/", googleSignUp)
-app.use("/", houseRegistrationRoute);
+app.use("/", houseRegistrationRoute)
+app.use("/", verifyHouseRoute);
 
 
 
@@ -52,10 +54,6 @@ app.listen(PORT, ()=>{
 
 /*
 Housing DB backend structure......
-
-3. Verify a house
-Input values: (House number, house address (name of street), LGA, state, country (for now, Nigeria)  
-Output: name of house owner, image of house.
 
 */
 
