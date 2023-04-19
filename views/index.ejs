@@ -19,7 +19,7 @@
     <title>Multer Tutorial</title>
   </head>
   <body>
-    <main class="admin">
+    <!-- <main class="admin">
       <div class="admin__upload-file">
         <form action="/api/uploadFile" enctype="multipart/form-data" method="post">
           <input type="text" name="LGA"  placeholder="LGA"/>
@@ -32,7 +32,15 @@
           <input class="admin__submit" type="submit" />
         </form>
       </div>
-    </main>
+    </main> -->
+
+      <form action="/api/verifyHouse" enctype="multipart/form-data" method="get">
+          <input type="text" name="LGA"  placeholder="LGA"/>
+          <input type="number" name="houseNumber" placeholder="house Number" />
+          <input type="text" name="street" placeholder="street"/>
+          <input type="text" name="state" placeholder="state"/>
+          <input class="admin__submit" type="submit" />
+        </form>
   </body>
 </html>
 

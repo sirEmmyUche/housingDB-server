@@ -5,7 +5,6 @@ const { RegisterHouse } = require("../models/registerhouseschema");
 const multer = require("multer");
 
 
-
 const router = express.Router();
 
 router.use(bodyParser.urlencoded({extended:false}))
@@ -13,20 +12,27 @@ router.use(bodyParser.json());
 
 router.get("/api/verifyHouse", async (req, res)=>{
     const {houseNumber, street, LGA, state} = req.body;
-    await RegisterHouse.find({houseNumber:houseNumber, 
-        street:street, 
-        LGA:LGA, 
-        state:state},(err, found)=>{
+       RegisterHouse.find({
+        $and:[{houseNumber:houseNumber}, 
+        {street:street}, 
+        {LGA:LGA}, 
+        {state:state}]},(err, found)=>{
             if(err){
                 console.log(err)
             }if(!found){
                 return res.status(400).json("Sorry we've got no record of such!")
             }if(found){
-                return res.status(200).json({
-                   owner:found.nameOfOwner,
-                   houseImg:found.houseImg,
-                   dateregisterd:found.createdAt
-                })
+                if(LGA === found.LGA && 
+                    street === found.street &&
+                    houseNumber === found.houseNumber &&
+                    state === found.state){
+                        console.log(found.nameOfOwner)
+                    }
+                // return res.status(200).json({
+                //    owner:found.nameOfOwner,
+                //    houseImg:found.houseImg,
+                //    dateregisterd:found.createdAt
+                // })
             }
         })
 })
