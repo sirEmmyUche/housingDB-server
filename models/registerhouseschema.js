@@ -39,7 +39,7 @@ const registerAHouseSchema = new mongoose.Schema({
     },
     proofOfOwnership:{
         type: String,
-        require:[true, "please provide documents supporting proof of ownership"]
+        required:[true, "please provide documents supporting proof of ownership"]
     }
     
 })
