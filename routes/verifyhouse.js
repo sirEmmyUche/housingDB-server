@@ -13,10 +13,10 @@ router.use(bodyParser.json());
 router.get("/api/verifyHouse", (req, res)=>{
     try{
         const {houseNumber, street, LGA, state } = req.body;
-        console.log(street, 1)
-        console.log(state, 2)
-        console.log(LGA, 3)
-        console.log(houseNumber, 4)
+        // console.log(street, 1)
+        // console.log(state, 2)
+        // console.log(LGA, 3)
+        // console.log(houseNumber, 4)
          RegisterHouse.find({
             $and:[
                 {houseNumber: houseNumber},
@@ -32,13 +32,19 @@ router.get("/api/verifyHouse", (req, res)=>{
                 if(!found){
                     return res.status(400).json("Sorry we've got no record of such!")
                 }if(found){
-                    return res.status(200).json({
-                       owner: found.nameOfOwner,
-                       houseImg:found.houseImg,
-                       dateregisterd:found.createdAt
-                    })
+                    // console.log(found)
+                   const foundResult = found.map((item)=>{
+                    return (
+                        {
+                            owner: item.nameOfOwner,
+                            houseImg: item.houseImg,
+                            dateregisterd:item.createdAt
+                        }
+                    )
+                   })
+                   return res.status(200).json(foundResult)
                 }
-            })
+            }) 
     }catch(err){
         console.log(err)
     }
