@@ -13,10 +13,6 @@ router.use(bodyParser.json());
 router.get("/api/verifyHouse", (req, res)=>{
     try{
         const {houseNumber, street, LGA, state } = req.body;
-        // console.log(street, 1)
-        // console.log(state, 2)
-        // console.log(LGA, 3)
-        // console.log(houseNumber, 4)
          RegisterHouse.find({
             $and:[
                 {houseNumber: houseNumber},
@@ -29,7 +25,7 @@ router.get("/api/verifyHouse", (req, res)=>{
                 if(err){
                     console.log(err)
                 }
-                if(!found){
+                if(found.length === 0 || found === undefined){
                     return res.status(400).json("Sorry we've got no record of such!")
                 }if(found){
                     // console.log(found)
@@ -44,7 +40,7 @@ router.get("/api/verifyHouse", (req, res)=>{
                    })
                    return res.status(200).json(foundResult)
                 }
-            }) 
+            })  
     }catch(err){
         console.log(err)
     }
