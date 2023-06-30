@@ -50,11 +50,3 @@ app.use("/", verifyHouseRoute);
 app.listen(PORT, ()=>{
     console.log(`it is working on port ${PORT}`)
 });
-
-
-/*
-Housing DB backend structure......
-
-*/
-
-

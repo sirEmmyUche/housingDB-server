@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(bodyParser.urlencoded({extended:false}))
 router.use(bodyParser.json());
 
-router.get("/api/verifyHouse", (req, res)=>{
+router.post("/api/verifyHouse", (req, res)=>{
     try{
         const {houseNumber, street, LGA, state } = req.body;
          RegisterHouse.find({
