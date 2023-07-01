@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(bodyParser.urlencoded({extended:false}))
 router.use(bodyParser.json());
 
-router.get("/api/verifyHouse", (req, res)=>{
+router.post("/api/verifyHouse", (req, res)=>{
     try{
         const {houseNumber, street, LGA, state } = req.body;
          RegisterHouse.find({
@@ -26,7 +26,7 @@ router.get("/api/verifyHouse", (req, res)=>{
                     console.log(err)
                 }
                 if(found.length === 0 || found === undefined){
-                    return res.status(400).json("Sorry we've got no record of such!")
+                    return res.status(404).json("Sorry we've got no record of such!")
                 }if(found){
                     // console.log(found)
                    const foundResult = found.map((item)=>{
