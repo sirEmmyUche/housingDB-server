@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
+// const bcrypt = require("bcrypt");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 
@@ -17,7 +18,10 @@ router.post("/login", (req, res)=>{
         console.log(err)
     }else{
         if(!foundUser){
-          return res.status(404).json("User not found")
+          return res.status(404).json({
+            token: false,
+            message:"user not found"
+          })
         }
         if(foundUser){
          bcrypt.compare(password, foundUser.password, function(err, result) {
@@ -25,11 +29,19 @@ router.post("/login", (req, res)=>{
             console.log(err)
            } 
            if(result === false){
-           return res.status(404).json("Incorrect username and password")
+           return res.status(404).json({
+            token: false,
+            message:"incorrect username and password"
+           })
            }
            if(result===true){
             // res.status(200).json(foundUser.firstName)
-           return res.render("index")
+           return res.status(200).json({
+            token:"tokenxyz234",
+            message:'successfully signed in',
+            firstName:foundUser.firstName,
+            lastName:foundUser.lastName
+           })
            }
          });
         }

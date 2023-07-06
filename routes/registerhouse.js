@@ -88,7 +88,10 @@ try{
       if (err){
         console.error(err)
       }else{
-       return res.status(200).json("Successfully registerd a house")
+       return res.status(200).json({
+        Message:"Successfully registerd a house",
+        Error: err
+       })
       }
     })
   }

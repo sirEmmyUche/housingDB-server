@@ -23,8 +23,8 @@ app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
 
-// allowing cors
-app.use(cors()); 
+// allowing all broswer to access this APIs NB: this is not a good practice for real world app
+app.use(cors({origin:"*"})); 
 
 mongoose.set("strictQuery", false);
 mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true, useUnifiedTopology: true });

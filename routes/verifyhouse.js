@@ -20,13 +20,18 @@ router.post("/api/verifyHouse", (req, res)=>{
                 {LGA:LGA},
                 {state:state}
             ]
+
             //"enter the filter field here"
+
            },(err, found)=>{
                 if(err){
                     console.log(err)
                 }
                 if(found.length === 0 || found === undefined){
-                    return res.status(400).json("Sorry we've got no record of such!")
+                    return res.status(404).json({
+                        message:"Sorry we've got no record of such!",
+                        Error:err
+                    })
                 }if(found){
                     // console.log(found)
                    const foundResult = found.map((item)=>{
@@ -34,11 +39,12 @@ router.post("/api/verifyHouse", (req, res)=>{
                         {
                             owner: item.nameOfOwner,
                             houseImg: item.houseImg,
-                            dateregisterd:item.createdAt
+                            dateRegisterd:item.createdAt
                         }
                     )
                    })
-                   return res.status(200).json(foundResult)
+                   // return res.status(200).json(foundResult)
+                   return res.status(200).json({...foundResult})
                 }
             })  
     }catch(err){
