@@ -19,7 +19,6 @@ router.post("/login", (req, res)=>{
     }else{
         if(!foundUser){
           return res.status(404).json({
-            token: false,
             message:"user not found"
           })
         }
@@ -30,7 +29,6 @@ router.post("/login", (req, res)=>{
            } 
            if(result === false){
            return res.status(404).json({
-            token: false,
             message:"incorrect username and password"
            })
            }
