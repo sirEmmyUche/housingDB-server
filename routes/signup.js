@@ -17,7 +17,6 @@ router.use(bodyParser.json());
 router.post("/signup", async (req, res)=>{
     const {password,firstName,lastName,email}= req.body;
     try{
-        console.log(password)
     let salt = await bcrypt.genSalt(10)
     let hashed = await bcrypt.hash(password, salt);
     const user = new User({
@@ -32,8 +31,7 @@ router.post("/signup", async (req, res)=>{
             if(err){
                 console.log(err)
                 return res.status(404).json({
-                    token:false,
-                    Error: "Sign Up failed"
+                    message: "Unable to sign up"
                 })
             }else{
                 return res.status(200).json({
