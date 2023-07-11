@@ -75,6 +75,4 @@ router.get('/auth/google/housingdb',
   }
 );
 
-
-
 module.exports = router;

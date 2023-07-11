@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(bodyParser.urlencoded({extended:false}))
 router.use(bodyParser.json());
 
-router.post("/api/verifyHouse", (req, res)=>{
+router.post("/verifyHouse", (req, res)=>{
     try{
         const {houseNumber, street, LGA, state } = req.body;
          RegisterHouse.find({
@@ -36,15 +36,14 @@ router.post("/api/verifyHouse", (req, res)=>{
                     // console.log(found)
                    const foundResult = found.map((item)=>{
                     return (
-                        {
+                        {   id:item.id,
                             owner: item.nameOfOwner,
                             houseImg: item.houseImg,
                             dateRegisterd:item.createdAt
                         }
                     )
                    })
-                   // return res.status(200).json(foundResult)
-                   return res.status(200).json({...foundResult})
+                   return res.status(200).json(...foundResult)
                 }
             })  
     }catch(err){
