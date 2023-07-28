@@ -1,10 +1,8 @@
 require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
-// const bcrypt = require("bcrypt");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
-const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
@@ -46,39 +44,3 @@ router.post("/signup", async (req, res)=>{
 })
 
 module.exports = router;
-
-
-// try{
-//          let saltRounds = 10;
-//          bcrypt.hash(req.body.password, saltRounds, function(err, hash){
-//         if (err){
-//             console.log(err)
-//         }else{
-//             console.log(hash)
-//             const user = new User({
-//                 firstName:firstName,
-//                 lastName: lastName,
-//                 email: email,
-//                 password:hash
-//             })
-//             user.validate()
-//             .then(()=>{
-//                 user.save((err)=>{
-//                     if(err){
-//                       return  res.status(404).json({
-//                         token:false,
-//                         Error:err
-//                       })
-//                     }else{
-//                         //return res.status(200).json("Signup successful") 
-//                      return  res.status(200).json({
-//                         token:true,
-//                         message:"Successfully signed In"
-//                      })
-//                     }
-//                 });
-//             })
-            
-//           }    
-//     });
-//     }catch(err){console.error(err)}

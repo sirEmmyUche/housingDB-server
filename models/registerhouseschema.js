@@ -7,11 +7,6 @@ const registerAHouseSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
       },
-    //   user: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: ['User', GoogleUserSchema]
-    //   },
-      
     nameOfOwner:{
         type: String,
         required:[true, "Name of house owner must be included and must match details in supported document"]
@@ -47,12 +42,4 @@ const registerAHouseSchema = new mongoose.Schema({
 const RegisterHouse = mongoose.model("RegisterHouse", registerAHouseSchema);
 
 
-module.exports = { RegisterHouse, };
-//Img  was excluded from the export module. 
-
-// module.exports = mongoose.model("HouseRegistration", registerAHouseSchema)
-
-
-// 4. Register a house
-// Input values: House number, street, LGA, state, Image of house, 
-// proof of ownership: name of house owner (documents to backup claims)
+module.exports = { RegisterHouse,};

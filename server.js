@@ -8,6 +8,7 @@ const signuproute = require("./routes/signup");
 const loginroute = require("./routes/login");
 const googleSignUp = require("./routes/googlesignup");
 const houseRegistrationRoute = require("./routes/registerhouse");
+const serviceRendered = require("./routes/serviceRendered");
 const verifyHouseRoute = require("./routes/verifyhouse");
 const path = require("path"); // path is an inbuilt node package
 
@@ -17,14 +18,23 @@ const app = express();
 // setting ejs engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(express.static(`${__dirname}/public`));
+
+
+// allowing files to be read by frontend for static (images) files
+app.use("/public", express.static('public'))
 
 // setting body-parser
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
 
-// allowing all broswer to access this APIs NB: this is not a good practice for real world app
-app.use(cors({origin:"*"})); 
+// setting cors policy
+app.use(
+  cors({
+    // origin:"*"  this will allow all browser to access this APIs route -- not a good practise
+     origin: "http://localhost:5173",
+    methods: "GET,POST,PUT,DELETE,PATCH",
+    credentials: true,
+  })); 
 
 mongoose.set("strictQuery", false);
 mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true, useUnifiedTopology: true });
@@ -38,6 +48,7 @@ app.get("/", (req, res, next)=>{
   next()
 })
 
+app.use("/", serviceRendered)
 app.use("/", signuproute)
 app.use("/", loginroute)
 app.use("/", googleSignUp)

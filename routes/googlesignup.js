@@ -6,6 +6,7 @@ const passport = require("passport");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const router = express.Router();
+const CLIENT_URL = "http://localhost:5173/dashboard"
 
 router.use(session({ secret: 'SECRET',
     resave: true,
@@ -57,22 +58,33 @@ passport.deserializeUser(function(user, done) {
       }
     ));  
 
-//handling google signup request
+router.get("/login/failed", (req,res) => {
+    res.status(401).json({
+        success:false,
+        message: "failure",
+    });
+});
 
-router.get('/auth/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email']
-  })
-);
+router.get("/login/success", (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      error: false,
+      message: "Successfully Loged In",
+      user: req.user,
+    });
+  } else {
+    res.status(403).json({ error: true, message: "Not Authorized" });
+  }
+});
+
+router.get('/auth/google',passport.authenticate('google', {scope: ['profile', 'email']}));
 
 router.get('/auth/google/housingdb',
   passport.authenticate('google', {
-    failureRedirect: '/login'
+    failureRedirect: '/login/failed',
+    successRedirect: CLIENT_URL
+
   }),
-  (req, res) => {
-    // Successful authentication, redirect home.
-    res.render("home");
-  }
 );
 
 module.exports = router;

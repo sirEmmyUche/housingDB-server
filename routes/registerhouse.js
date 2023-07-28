@@ -72,6 +72,7 @@ try{
   const {nameOfOwner,houseNumber,street,LGA,state,} = req.body;
   console.log(req.files);
   console.log(req.files);
+  console.log(req.body)
   if (!req.files){
    return  res.status(404).json("Please upload a file")
   }else{
@@ -86,11 +87,13 @@ try{
     })
     newHouseRegistration.save((err)=>{
       if (err){
+        return res.status(404).json({
+          Error:"Unable to resgister a house"
+        })
         console.error(err)
       }else{
        return res.status(200).json({
         Message:"Successfully registerd a house",
-        Error: err
        })
       }
     })
