@@ -37,7 +37,7 @@ app.use(
   })); 
 
 mongoose.set("strictQuery", false);
-mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true, useUnifiedTopology: true, timeout:30000,});
+mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true, useUnifiedTopology:true, timeout:30000,debug:true});
 
 const PORT = process.env.PORT || 3000;
 
