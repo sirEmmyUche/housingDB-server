@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { RegisterHouse } = require("../models/registerhouseschema");
-// const multer = require("multer");
 
 
 const router = express.Router();
@@ -25,7 +24,8 @@ router.post("/verifyHouse", (req, res)=>{
 
            },(err, found)=>{
                 if(err){
-                    console.log(err)
+                    // console.log(err)
+                    return res.status(500).json({error:"An error occured"})
                 }
                 if(found.length === 0 || found === undefined){
                     return res.status(404).json({
@@ -47,17 +47,11 @@ router.post("/verifyHouse", (req, res)=>{
                 }
             })  
     }catch(err){
-        console.log(err)
-        return 
+        // console.log(err)
+        return res.status(500).json({error:"An error occured"})
     }
   
 })
 
 
 module.exports = router;
-
-
-
-// 3. Verify a house
-// Input values: (House number, house address (name of street), LGA, state, country (for now, Nigeria)  
-// Output: name of house owner, image of house.

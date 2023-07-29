@@ -16,7 +16,8 @@ router.post("/login", (req, res)=>{
       const {password, email} = req.body;
       User.findOne({email:email},(err, foundUser)=>{
       if(err){
-          console.log(err)
+          // console.log(err)
+          return res.status(500).json({Error:"An error occured"})
       }else{
           if(!foundUser){
             return res.status(404).json({
@@ -26,7 +27,8 @@ router.post("/login", (req, res)=>{
       if(foundUser){
            bcrypt.compare(password, foundUser.password, function(err, result) {
            if(err){
-             console.log(err)
+            //  console.log(err)
+            return res.status(500).json({Error:"An error occured"})
         } 
         if(result === false){
         return res.status(404).json({
@@ -40,10 +42,6 @@ router.post("/login", (req, res)=>{
           message:'successfully signed in',
           token: Token,
           firstName:foundUser.firstName,
-          // token:"tokenxyz234",
-          // message:'successfully signed in',
-          // 
-          // lastName:foundUser.lastName
         })
         }
       });
@@ -51,7 +49,7 @@ router.post("/login", (req, res)=>{
   }
 })
   }catch(err){
-      console.log(err)
+      // console.log(err)
       return res.status(500).json({Error:"An error occured"})
   }
 })

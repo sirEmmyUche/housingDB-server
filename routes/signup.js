@@ -27,7 +27,7 @@ router.post("/signup", async (req, res)=>{
     .then(()=>{
         user.save((err)=>{
             if(err){
-                console.log(err)
+                // console.log(err)
                 return res.status(404).json({
                     message: "Unable to sign up"
                 })
@@ -39,7 +39,10 @@ router.post("/signup", async (req, res)=>{
             }
         })
     })
-    }catch(err){console.log(err)}
+    }catch(err){
+        // console.log(err)
+        return res.status(500).json({message:"An error occured"})
+    }
     
 })
 

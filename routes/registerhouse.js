@@ -4,9 +4,6 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const { RegisterHouse } = require("../models/registerhouseschema");
 const multer = require("multer");
-// const User = require("./models/user");
-// const GoogleUser = require("../models/googleschema");
-
 
 const router = express.Router();
 
@@ -34,29 +31,29 @@ const multerStorage = multer.diskStorage({
   },
 });
 
-const checkFileType = (file, cb)=>{
+// const checkFileType = (file, cb)=>{
 
-  if(file.fieldname === "houseImage"){
-    if (file.mimetype.split("/")[1] === "png" ||
-    file.mimetype.split("/")[1] === "jpg" ||
-    file.mimetype.split("/")[1] === "jpeg"){
-      cb(null, true);
-    } else{
-      cb(new Error("Not a supported File type!!"), false);
-    }
-  }
-  if(file.fieldname === "proofOfOwnership"){
-    if(
-      file.mimetype.split("/")[1] ===  "application/pdf" ||
-      file.mimetype.split("/")[1] ===  'application/msword'||
-      file.mimetype.split("/")[1] ===  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ){
-      cb(null, true);
-    } else {
-      cb(new Error("Not a PDF or other supported File type!!"), false);
-    }
-  }
-} 
+//   if(file.fieldname === "houseImage"){
+//     if (file.mimetype.split("/")[1] === "png" ||
+//     file.mimetype.split("/")[1] === "jpg" ||
+//     file.mimetype.split("/")[1] === "jpeg"){
+//       cb(null, true);
+//     } else{
+//       cb(new Error("Not a supported File type!!"), false);
+//     }
+//   }
+//   if(file.fieldname === "proofOfOwnership"){
+//     if(
+//       file.mimetype.split("/")[1] ===  "application/pdf" ||
+//       file.mimetype.split("/")[1] ===  'application/msword'||
+//       file.mimetype.split("/")[1] ===  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+//     ){
+//       cb(null, true);
+//     } else {
+//       cb(new Error("Not a PDF or other supported File type!!"), false);
+//     }
+//   }
+// } 
 
 
 const upload = multer({
@@ -90,7 +87,7 @@ try{
         return res.status(404).json({
           Error:"Unable to resgister a house"
         })
-        console.error(err)
+        // console.error(err)
       }else{
        return res.status(200).json({
         Message:"Successfully registerd a house",
@@ -100,31 +97,10 @@ try{
   }
   
 } catch(error){
-  console.log(error)
-     return res.json({error})
+  // console.log(error)
+     return res.status(500).json({error:"An error occured"})
   }
   // next()
 })
 
 module.exports = router;
-
-
-/*
-
-// Multer Filter from another code
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.split("/")[1] === "pdf") {
-    cb(null, true);
-  } else {
-    cb(new Error("Not a PDF File!!"), false);
-  }
-};
-
-fileFilter: function (req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-        return cb(new Error('Only image files are allowed!'));
-    }
-    cb(null, true);
-  }
-
-*/
