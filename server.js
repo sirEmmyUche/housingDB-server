@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const User = require("./models/user");
+// const User = require("./models/user");
 const signuproute = require("./routes/signup");
 const loginroute = require("./routes/login");
 const googleSignUp = require("./routes/googlesignup");
@@ -37,7 +37,7 @@ app.use(
   })); 
 
 mongoose.set("strictQuery", false);
-mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true, useUnifiedTopology: true, timeout:30000,});
 
 const PORT = process.env.PORT || 3000;
 
