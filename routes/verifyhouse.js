@@ -31,7 +31,8 @@ router.post("/verifyHouse", (req, res)=>{
                     return res.status(404).json({
                         message:"Sorry we've got no record of such!",
                         Error:err
-                }if(found){
+                }
+                if(found){
                     // console.log(found)
                    const foundResult = found.map((item)=>{
                     return (
