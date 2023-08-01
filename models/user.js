@@ -25,3 +25,22 @@ const userSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model("User", userSchema);
+
+
+// Schema({
+//   email: {
+//     type: String,
+//     requird: true,
+//   },
+//   otp: {
+//     type: String,
+//     required: true,
+//   },
+//   createdAt: {
+//     type: Date,
+//     default: Date.now,
+//     index: { expires: 300 },
+//     // after 5 mins it get's deleted
+//   },
+// },
+// { timestamps: true })
