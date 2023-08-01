@@ -36,8 +36,9 @@ app.use(
     credentials: true,
   })); 
 
-mongoose.set("strictQuery", false);
-mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true, useUnifiedTopology:true, timeout:30000,debug:true});
+mongoose.set("strictQuery", true);
+mongoose.connect(process.env.MONGO_URL,{ timeout:30000,debug:true}).then(console.log("connected to DB"));
+//useNewUrlParser:true, useUnifiedTopology:true,
 
 const PORT = process.env.PORT || 3000;
 
