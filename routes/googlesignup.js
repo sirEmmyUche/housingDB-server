@@ -31,7 +31,8 @@ passport.deserializeUser(function(user, done) {
         userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
       },
       async (accessToken, refreshToken, profile, done) => {
-        // console.log(profile);
+        try{
+            // console.log(profile);
         // console.log(accessToken);
         // console.log(refreshToken);
         GoogleUser.findOne({"google.id": profile.id }, (err, foundUser)=>{
@@ -55,6 +56,9 @@ passport.deserializeUser(function(user, done) {
           return done(null, newUser); 
           }
         })
+        }catch(err){
+          console.log(err)
+        }
        
       }
     ));  
