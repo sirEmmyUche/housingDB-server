@@ -35,27 +35,23 @@ passport.deserializeUser(function(user, done) {
             // console.log(profile);
         // console.log(accessToken);
         // console.log(refreshToken);
-        GoogleUser.findOne({"google.id": profile.id }, (err, foundUser)=>{
-          if(err){
-            // console.log(err)
-            throw {error: "An error occured"}
-          }
-          if(foundUser){
+        const googleUser = await GoogleUser.findOne({"google.id": profile.id });
+          if(googleUser){
              return done(null, foundUser);
           }
-          if(!foundUser){
-             const newUser = new GoogleUser({
-            method:"google",
-            google:{
-              id: profile.id,
-              name:profile.displayName,
-              email:profile.emails[0].value
-            }
-          })
-          newUser.save(); 
-          return done(null, newUser); 
-          }
-        })
+          if(!googleUser){
+            const newUser = new GoogleUser({
+           method:"google",
+           google:{
+             id: profile.id,
+             name:profile.displayName,
+             email:profile.emails[0].value
+           }
+         })
+         newUser.save(); 
+         return done(null, newUser); 
+         } 
+        
         }catch(err){
           console.log(err)
         }

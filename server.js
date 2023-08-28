@@ -30,15 +30,17 @@ app.use(bodyParser.json());
 // setting cors policy
 app.use(
   cors({
-    // origin:"*"  this will allow all browser to access this APIs route -- not a good practise
+    //origin:"*",  //this will allow all browser to access this APIs route -- not a good practise
      origin: ["http://localhost:5173","https://house-verification-system.vercel.app/"],
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
   })); 
 
 mongoose.set("strictQuery", true);
-mongoose.connect(process.env.MONGO_URL,{timeout:30000,debug:true}).then(console.log("connected to DB"));
-//useNewUrlParser:true, useUnifiedTopology:true,
+mongoose.connect(process.env.MONGO_URL)
+.then(()=>{console.log("Connected to Database")})
+.catch(err=>console.log(err));
+
 
 const PORT = process.env.PORT || 3000;
 
