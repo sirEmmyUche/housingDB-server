@@ -3,7 +3,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-// const User = require("./models/user");
 const signuproute = require("./routes/signup");
 const loginroute = require("./routes/login");
 const googleSignUp = require("./routes/googlesignup");
@@ -31,19 +30,18 @@ app.use(bodyParser.json());
 app.use(
   cors({
     //origin:"*",  //this will allow all browser to access this APIs route -- not a good practise
-     origin: ["http://localhost:5173","https://house-verification-system.vercel.app/"],
-    methods: "GET,POST,PUT,DELETE,PATCH",
+     origin: "https://house-verification-system.vercel.app/" ,//"http://localhost:5173", 
+    methods: "get,post,put,delete,patch",
     credentials: true,
   })); 
 
 mongoose.set("strictQuery", true);
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(`${process.env.MONGO_URL}`)
 .then(()=>{console.log("Connected to Database")})
 .catch(err=>console.log(err));
 
 
 const PORT = process.env.PORT || 3000;
-
 
 //handling routes request
 app.get("/", (req, res, next)=>{
@@ -57,8 +55,6 @@ app.use("/", loginroute)
 app.use("/", googleSignUp)
 app.use("/", houseRegistrationRoute)
 app.use("/", verifyHouseRoute);
-
-
 
 // listening to port
 app.listen(PORT, ()=>{
