@@ -30,10 +30,10 @@ app.use(bodyParser.json());
 app.use(
   cors({
     //origin:"*",  //this will allow all browser to access this APIs route -- not a good practise
-     origin: "https://house-verification-system.vercel.app/" ,//"http://localhost:5173", 
+     origin: "https://house-verification-system.vercel.app",  //"http://localhost:5173", 
     methods: "get,post,put,delete,patch",
     credentials: true,
-  })); 
+  }));
 
 mongoose.set("strictQuery", true);
 mongoose.connect(`${process.env.MONGO_URL}`)
