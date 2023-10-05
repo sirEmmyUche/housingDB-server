@@ -30,10 +30,10 @@ app.use(bodyParser.json());
 // setting cors policy
 app.use(
   cors({
-    // origin:"*"  this will allow all browser to access this APIs route -- not a good practise
-     origin: ["http://localhost:5173","https://house-verification-system.vercel.app/"],
-    methods: "GET,POST,PUT,DELETE,PATCH",
-    credentials: true,
+    origin:"*"  //this will allow all browser to access this APIs route -- not a good practise
+    //  origin: ["http://localhost:5173","https://house-verification-system.vercel.app/"],
+    // methods: "GET,POST,PUT,DELETE,PATCH",
+    // credentials: true,
   })); 
 
 mongoose.set("strictQuery", true);
