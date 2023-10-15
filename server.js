@@ -3,12 +3,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cookieParser = require('cookie-parser')
 const signuproute = require("./routes/signup");
 const loginroute = require("./routes/login");
 const googleSignUp = require("./routes/googlesignup");
 const houseRegistrationRoute = require("./routes/registerhouse");
 const serviceRendered = require("./routes/serviceRendered");
 const verifyHouseRoute = require("./routes/verifyhouse");
+const protectedRoute = require("./routes/protected");
 const path = require("path"); // path is an inbuilt node package
 
 // setting express app
@@ -25,12 +27,13 @@ app.use("/public", express.static('public'))
 // setting body-parser
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // setting cors policy
 app.use(
   cors({
-    //origin:"*",  //this will allow all browser to access this APIs route -- not a good practise
-     origin: "https://house-verification-system.vercel.app",  //"http://localhost:5173", 
+   // origin:"*",  //this will allow all browser to access this APIs route -- not a good practise
+     origin: "https://house-verification-system.vercel.app", 
     methods: "get,post,put,delete,patch",
     credentials: true,
   }));
@@ -55,6 +58,7 @@ app.use("/", loginroute)
 app.use("/", googleSignUp)
 app.use("/", houseRegistrationRoute)
 app.use("/", verifyHouseRoute);
+app.use("/", protectedRoute);
 
 // listening to port
 app.listen(PORT, ()=>{

@@ -2,11 +2,14 @@ require('dotenv').config()
 const express = require("express");
 const GoogleUser = require("../models/googleschema");
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const passport = require("passport");
-const jwt = require("jsonwebtoken");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
+
+router.use(cookieParser());
 
 router.use(session({ secret: 'SECRET',
     resave: true,
@@ -27,33 +30,29 @@ passport.deserializeUser(function(user, done) {
   passport.use(new GoogleStrategy({
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
-        callbackURL:"http://localhost:3000/auth/google/callback",
-        //"https://housing-84si.onrender.com/auth/google/callback",
-        //"http://localhost:5173/auth/google/callback",
+        callbackURL: "https://housing-84si.onrender.com/auth/google/housingdb",//"http://localhost:3000/auth/google/housingdb",
         userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
       },
       async (accessToken, refreshToken, profile, done) => {
         try{
-            console.log(profile);
-        console.log(accessToken);
-        console.log(refreshToken);
-        const googleUser = await GoogleUser.findOne({"google.id": profile.id });
-          if(googleUser){
-             return done(null, profile);
+            // console.log(accessToken, refreshToken, profile);
+       const findGoogleUser = await GoogleUser.findOne({"google.id": profile.id })
+       if(findGoogleUser){
+        return done(null, findGoogleUser)
+       }
+       if(!findGoogleUser){
+        const newGoogleUserSignUp =  new GoogleUser({
+          method:"google",
+          google:{
+            id: profile.id,
+            name:profile.displayName,
+            email:profile.emails[0].value
           }
-          if(!googleUser){
-            const newUser = new GoogleUser({
-           method:"google",
-           google:{
-             id: profile.id,
-             name:profile.displayName,
-             email:profile.emails[0].value
-           }
-         })
-         newUser.save(); 
-         return done(null, newUser); 
-         } 
-        
+        })
+        await newGoogleUserSignUp.save();
+        return done(null, newGoogleUserSignUp)
+       }
+       
         }catch(err){
           console.log(err)
         }
@@ -61,30 +60,37 @@ passport.deserializeUser(function(user, done) {
       }
     ));  
 
-
-router.post("/login/failed", (req, res) => {
- res.status(401).json({
-  message:"unable to authenticate user",
-  userIdentified:false
- })
+router.get("/login/failed", (req,res) => {
+    res.status(401).json({
+        success:false,
+        message: "failure",
+    });
 });
 
-router.post('/auth/google',passport.authenticate('google', {scope: ['profile', 'email']}));
 
-router.post('/auth/google/callback',
-passport.authenticate('google', {
-    failureRedirect: '/login/failed',
-    // successRedirect: "http://localhost:5173/dashboard" //'/login/success',
-  }),
-  (req, res)=>{
-    let user = {
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user.email,
-    };
-    const token = jwt.sign(user, process.env.JWT_SECRET);
-    res.status(200).json({ token, user });
-  }
-);
+router.get('/auth/google',passport.authenticate('google', {scope: ['profile', 'email']}));
 
-module.exports = router;
+router.get('/auth/google/housingdb', (req, res, next) => {
+  passport.authenticate('google', async(err, user, info) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    
+    if (!user) {
+      return res.status(401).json({ error: 'Authentication failed' });
+    }
+    // Authentication successful, user is available in req.user.
+    const payload = {userId:user.google.id, username:user.google.name};
+    const token =  jwt.sign(payload, process.env.JWT_SECRET,{ expiresIn: '1d' });
+    return res.cookie('token', token, {
+      httpOnly: false, //setting this to false means it can be read by JS on client end which makes it vulnerable to xsl attack
+      secure: process.env.NODE_ENV === "production",
+    })
+    .redirect("https://house-verification-system.vercel.app/dashboard");
+  })(req, res, next);
+});
+
+
+module.exports = router; 
+
